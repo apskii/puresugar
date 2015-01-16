@@ -1,5 +1,5 @@
-#![feature(globs)]
 #![allow(unused_must_use)]
+#![allow(unstable)]
 
 use std::os;
 use std::io::File;
@@ -9,10 +9,10 @@ use std::iter::IteratorExt;
 use Sugar::*;
 use State::*;
 
-#[deriving(Copy)]
+#[derive(Copy)]
 enum State { Walk, Bracket, Start(Sugar), Inline(Sugar), Multiline(Sugar, u8) }
 
-#[deriving(Copy)]
+#[derive(Copy)]
 enum Sugar { Array, Object }
 
 impl Sugar {
@@ -21,10 +21,10 @@ impl Sugar {
   fn end_char(&self) -> char { match *self { Array => ']', Object => '}' } }
 }
 
-struct StateStack { top_ix: uint, buffer: [State, ..128] }
+struct StateStack { top_ix: usize, buffer: [State; 128] }
 
 impl StateStack {
-  fn new() -> StateStack { StateStack { top_ix: 0u, buffer: [Walk, ..128] } }
+  fn new() -> StateStack { StateStack { top_ix: 0us, buffer: [Walk; 128] } }
   fn push(&mut self, state: State) { self.buffer[self.top_ix] = state; self.top_ix += 1 }
   fn pop(&mut self) { self.top_ix -= 1 }
   fn top(&self) -> State {
@@ -35,7 +35,7 @@ impl StateStack {
   }
 }
 
-fn skip_indent<I: Iterator<char>>(iter: &mut Peekable<char, I>) -> u8 {
+fn skip_indent<I>(iter: &mut Peekable<char, I>) -> u8 where I: Iterator<Item=char> {
   let mut indent = 0u8;
   loop {
     if !iter.peek().map_or(false, |c| c.is_whitespace() && !c.is_control()) {
