@@ -13,7 +13,7 @@ data Props = Props #
 ```
 desugars to
 ```haskell
-data Props = Props 
+data Props = Props
   { greeting :: String }
 ```
 b)
@@ -34,10 +34,17 @@ combo = run @
 ```
 desugars to
 ```haskell
-combo = run 
+combo = run
   [ quux [ (foo { x: 1, y : 2 }), (bar { x: 1, y: 1 }) ]
     { a : 123
     , b : 45678 }
   , bazz { huh: "this stuff works!" } ]
 ```
 Check test_input and test_output files.
+
+### Example project: `Bounce`
+Sugared source here: http://lpaste.net/118658
+
+Check how it works here: http://jsfiddle.net/6mt3ffpe/
+
+Gruntfile integration (linux pipeline): https://gist.github.com/apsk/6d2865179d57212600c2#file-gruntfile-js-L18
